@@ -33,8 +33,13 @@ or
 vagrant ssh k8s2
 ```
 
-## Configuration tips
+## Configuration tips and troubleshooting
 
 This is setup using a virtualbox bridged network, defaulting to the 192.168.0.0/24 address space with static IPs. Change this to your own taste.
 
 by default the VMs it creates have 4 gigabytes of ram, this may be a lot. Consider adjusting to your needs.
+
+If your host PC has multiple nics, virtual box may be bridging the wrong one. Make sure the bridged NIC is set sorrectly and has a route to the internet. This may need to be set for both VMs
+
+the interface names in the VM's are inconsistent. I have observed 'enp0s3','enp0s8', as well as eth0/eth1. This currently breaks the routing login in the vagrant file.
+You may need to modify the vagrant file yourself (line beginning inline: eval) to make it search and destroy the approriate default route.

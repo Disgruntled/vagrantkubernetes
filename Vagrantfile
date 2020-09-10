@@ -12,21 +12,21 @@ Vagrant.configure("2") do |config|
       bridge: "en0: Ethernet", 
       ip: "192.168.0.242"
       #Remember to change the IP addresses!
-    k8s1.vm.provision "shell",
+    k8s1.vm.provision "net1k8s1", type: "shell",
       run: "always",
       inline: "route add default gw 192.168.0.1"
-    k8s1.vm.provision "shell",
+      k8s1.vm.provision "net2k8s1", type: "shell",
       run: "always",
       inline: "eval `route -n | awk '{ if ($8 ==\"eth0\" && $2 != \"0.0.0.0\") print \"route del default gw \" $2; }'`"
     #
     #Below this comment, scripts are only run at provisioning time
     # 
-    k8s1.vm.provision "shell",
+    k8s1.vm.provision "k8s1install", after: "net2k8s1", type:"shell",
       inline: "sudo snap install microk8s --classic"
-    k8s1.vm.provision "shell",
+    k8s1.vm.provision "dashboard", after: "kus1install", type: "shell",
       inline: "microk8s enable dashboard"
     #Copy paste the output to k8s2  
-    k8s1.vm.provision "shell",
+    k8s1.vm.provision "addnode", after: "dashboard", type:"shell",
       inline: "microk8s add-node"  
     #Done
     k8s1.vm.post_up_message = "k8s1 is up"
