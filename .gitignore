@@ -1,0 +1,7 @@
+*.swp
+*.log
+scratch
+*.pyc
+settings.json
+.vagrant
+.vagrant/*
