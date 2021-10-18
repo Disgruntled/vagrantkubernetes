@@ -52,3 +52,22 @@ This is done in the "bridge:" arguments in the vagrantfile
 
 the interface names in the VM's are inconsistent. I have observed 'enp0s3','enp0s8', as well as eth0/eth1. This currently breaks the routing login in the vagrant file.
 You may need to modify the vagrant file yourself (line beginning inline: eval) to make it search and destroy the approriate default route. replace enp0s3 with the route entry you want to delete
+
+## Known Issues
+
+###  unable to upgrade connection: pod does not exist!
+
+If building a kubenernetes cluster with kubeadm, it will grab onto lowest Ip address as the node ip. This will work fine for the master nodes, but will cause some irregularities on workers. This can manifest itself with pod logs problems, or exec'ing commands in a pod.
+
+To fix the workers you need to modify /etc/systemd/system/kubelet.service.d/10-kubeadm.conf and add the line
+
+Environment="KUBELET_EXTRA_ARGS=--node-ip=192.168.0.243" 
+
+Where that IP is equal to the routeable IP of your worker node.
+
+then restart kubelet
+
+```bash
+systemctl daemon-reload
+systemctl restart kubelet
+```

@@ -5,3 +5,4 @@ scratch
 settings.json
 .vagrant
 .vagrant/*
+lab_42.yaml
